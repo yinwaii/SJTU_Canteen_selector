@@ -1,0 +1,5 @@
+<!--index.wxml-->
+<view class="container-echarts">
+  <ec-canvas id="mychart-dom-scatter" canvas-id="mychart-scatter" ec="{{ ec }}">
+  </ec-canvas>
+</view>

@@ -1,0 +1,47 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/settings/settings",
+    "pages/stats/stats"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle":"black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "debug": true,
+  "permission":{
+    "scope.userLocation": {
+      "desc": "我们需要获取您的位置以确定哪个食堂最近。"
+    }
+  },
+  "tabBar": {
+    "color":"#000",
+    "selectedColor":"#4FAE70",
+    "backgroundColor": "#FFF",
+    "list":[
+      {
+        "pagePath": "pages/index/index",
+        "text": "主页",
+        "iconPath": "/images/home.png",
+        "selectedIconPath": "/images/home-selected.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计",
+        "iconPath": "/images/Task-Statistics.png",
+        "selectedIconPath": "/images/Task-Statistics-selected.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "/images/Setting.png",
+        "selectedIconPath": "/images/Setting-selected.png"
+      }
+    ]
+  }
+}
