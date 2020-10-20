@@ -2,9 +2,10 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 var data_get = [];
+var count=0;
 var data_position = [];
-var flag=false;
-var Chart=null;
+var flag = false;
+var Chart = null;
 
 function sleep(numberMillis) {
   var now = new Date();
@@ -16,31 +17,32 @@ function sleep(numberMillis) {
   }
 }
 
-function getDistance(pos1, pos2){
-  var radLat1 = pos1[0]*Math.PI / 180.0;
-  var radLat2 = pos2[0]*Math.PI / 180.0;
+function getDistance(pos1, pos2) {
+  var radLat1 = pos1[0] * Math.PI / 180.0;
+  var radLat2 = pos2[0] * Math.PI / 180.0;
   var a = radLat1 - radLat2;
-  var b = pos1[1]*Math.PI / 180.0 - pos2[1]*Math.PI / 180.0;
-  var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
-  Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
-  s = s *6378.137 ;// EARTH_RADIUS;
+  var b = pos1[1] * Math.PI / 180.0 - pos2[1] * Math.PI / 180.0;
+  var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+    Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+  s = s * 6378.137; // EARTH_RADIUS;
   s = Math.round(s * 10000) / 10000;
   return s;
-  }
+}
 
 Page({
   data: {
     ec: {
-      lazyLoad:true
+      lazyLoad: true
     }
   },
-  onLoad(options){
+  onLoad(options) {
     this.echartsComponnet = this.selectComponent('#mychart-dom-scatter');
     this.getThePosition();
   },
   getTheData() {
-    var that=this
+    var that = this
     data_get = []
+    count=0
     for (var i = 0; i < 9; i++) {
       wx.request({
         url: 'https://canteen.sjtu.edu.cn/CARD/Ajax/PlaceDetails/' + (i + 1).toString() + '00',
@@ -49,11 +51,14 @@ Page({
         },
         success: function (res) {
           data_get.push(res.data)
+          count++
           console.log("success!\n", data_get)
-          if(!Chart)
-          that.init_echarts();
-          else
-          that.setOption(Chart)
+          if (count == 9) {
+            if (!Chart)
+              that.init_echarts();
+            else
+              that.setOption(Chart)
+          }
         },
         fail: function (res) {
           console.log("fail~\n", res)
@@ -62,24 +67,25 @@ Page({
       })
     }
   },
-  getThePosition(){
-    var that=this
-    data_position=[]
-      wx.getLocation({
-      type:'gcj02',
-      isHighAccuracy:false,
-      success(res){
-        data_position.push(res.latitude,res.longitude)
-        console.log("success",res)
+  getThePosition() {
+    var that = this
+    data_position = []
+    wx.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: false,
+      success(res) {
+        data_position.push(res.latitude, res.longitude)
+        console.log("success", res)
         that.getTheData();
       },
-      fail(res){
+      fail(res) {
         console.log("fail to get the position")
       }
     })
     console.log("get the data")
   },
   init_echarts: function () {
+    console.log('hi~')
     this.echartsComponnet.init((canvas, width, height, dpr) => {
       // 初始化图表
       Chart = echarts.init(canvas, null, {
@@ -93,8 +99,8 @@ Page({
     });
   },
   setOption: function (Chart) {
-    Chart.clear();  // 清除
-    Chart.setOption(this.getOption());  //获取新数据
+    Chart.clear(); // 清除
+    Chart.setOption(this.getOption()); //获取新数据
   },
   getOption: function () {
     var canteen_pos = [
@@ -160,7 +166,7 @@ Page({
     }
     var canteen_series = ['一餐', '二餐', '三餐', '四餐', '五餐', '六餐', '七餐', '哈乐', '玉兰苑'];
     var data_canteen = [];
-  
+
     for (var j = 0; j < 9; j++) {
       var tmp = [];
       console.log(j, data_get[j])
@@ -171,9 +177,9 @@ Page({
       for (var i = 0; i < data_get_tmp.length; i++) {
         tmp.push(
           [
-            getDistance(data_position,canteen_pos[canteen_dic[data_get_tmp[i]["Id"]]-1]),
+            getDistance(data_position, canteen_pos[canteen_dic[data_get_tmp[i]["Id"]] - 1]),
             (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"]) / data_get_tmp[i]["Seat_s"],
-            (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"])/ 10,
+            (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"]),
             data_get_tmp[i]["Name"],
             data_get_tmp[i]["Id"],
           ]
@@ -185,47 +191,42 @@ Page({
         data: tmp,
         label: {
           show: true,
-          formatter: '{@[3]}'
+          formatter: '{@[3]}\n{@[2]}'
         }
       })
     }
     console.log(data_canteen)
-  
-    var axisCommon = {
-      axisLabel: {
-        textStyle: {
-          color: '#C8C8C8'
-        }
-      },
-      axisTick: {
-        lineStyle: {
-          color: '#fff'
-        }
-      },
-      axisLine: {
-        lineStyle: {
-          color: '#C8C8C8'
-        }
-      },
-      splitLine: {
-        lineStyle: {
-          color: '#C8C8C8',
-          type: 'solid'
-        }
-      }
-    };
-  
+
     var option = {
       color: ["#70F3FF", "#FF461F", "#9ED900", "#B36D61", "#725E82", "#2E4E7E", "#88ADA6", "#4C221B", "#7FECAD"],
       backgroundColor: '#eee',
-      xAxis: axisCommon,
-      yAxis: axisCommon,
+      xAxis: {
+        type: 'value',
+        name: '距离/km',
+        nameLocation: 'center',
+        nameGap: 22
+      },
+      yAxis: {
+        type: 'value',
+        name: '空座比',
+        nameLocation: 'end'
+      },
+      grid: {
+        top: '90',
+        bottom: '60'
+      },
       legend: {
-        data: canteen_series
+        data: canteen_series,
+        textStyle: {
+          width: '90%',
+          height: '90%',
+          fontSize: 14
+        },
+        padding: 8,
       },
       visualMap: {
         show: false,
-        max: 100,
+        max: 1000,
         dimension: 2,
         inRange: {
           symbolSize: [20, 70]
