@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "食堂选择器",
   "usingComponents": {
     "ec-canvas": "../../ec-canvas/ec-canvas"
   },
