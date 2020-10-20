@@ -240,5 +240,16 @@ Page({
     }
     return option;
   },
-
+  onTabItemTap(){
+    this.getThePosition();
+  },
+  onPullDownRefresh(){
+    wx.startPullDownRefresh({
+      success: (res) => {
+        wx.stopPullDownRefresh({
+          success: (res) => {this.getThePosition()},
+        })
+      },
+    })
+  }
 })
