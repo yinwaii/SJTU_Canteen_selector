@@ -19,7 +19,7 @@
 .usermotto {
   margin-top: 30rpx;
   width: 220px;
-  height: 600rpx;
+  height: 700rpx;
   display: flex;
   align-items: center;
   justify-content: center;

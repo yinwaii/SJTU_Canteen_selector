@@ -13,7 +13,7 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "debug": true,
+  "debug": false,
   "permission":{
     "scope.userLocation": {
       "desc": "我们需要获取您的位置以确定哪个食堂最近。"

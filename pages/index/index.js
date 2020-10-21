@@ -198,7 +198,8 @@ Page({
           distance: getDistance(data_position, canteen_pos[canteen_dic[data_get_tmp[i]["Id"]] - 1]),
           ratio: data_get_tmp[i]["Seat_u"] / data_get_tmp[i]["Seat_s"],
           empty_seats: (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"]),
-          name: canteen_series[canteen_dic[data_get_tmp[0]["Id"]] - 1] + ' ' + data_get_tmp[i]["Name"]
+          name: canteen_series[canteen_dic[data_get_tmp[0]["Id"]] - 1] + ' ' + data_get_tmp[i]["Name"],
+          id:data_get_tmp[i]["Id"]
         })
       }
     }

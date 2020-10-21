@@ -12,14 +12,14 @@
         </mp-cells>
         <mp-cells title="显示设置">
             <mp-cell title="推荐食堂数">
-                <slider bindchange="change_num" value="{{num}}" min="1" max="10" show-value />
+                <slider bindchange="change_num" value="{{num}}" min="1" max="7" show-value />
             </mp-cell>
         </mp-cells>
 
         <view class="weui-cells__title">过滤设置</view>
         <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_switch">
-                <view class="weui-cell__bd">是否开启过滤</view>
+                <view class="weui-cell__bd">是否开启过滤（开发中）</view>
                 <view class="weui-cell__ft">
                     <switch checked />
                 </view>
