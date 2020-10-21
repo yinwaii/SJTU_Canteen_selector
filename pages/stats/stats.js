@@ -2,9 +2,10 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 var data_get = [];
-var count=0;
+var count = 0;
 var data_position = [];
 var flag = false;
+var already_loading=false;
 var Chart = null;
 
 function sleep(numberMillis) {
@@ -42,7 +43,7 @@ Page({
   getTheData() {
     var that = this
     data_get = []
-    count=0
+    count = 0
     for (var i = 0; i < 9; i++) {
       wx.request({
         url: 'https://canteen.sjtu.edu.cn/CARD/Ajax/PlaceDetails/' + (i + 1).toString() + '00',
@@ -50,10 +51,13 @@ Page({
           'Content-Type': 'application/json'
         },
         success: function (res) {
+          if (res.data[0].Id == 36)
+            res.data[0].Seat_s /= 2
           data_get.push(res.data)
           count++
           console.log("success!\n", data_get)
           if (count == 9) {
+            flag=true;
             if (!Chart)
               that.init_echarts();
             else
@@ -68,18 +72,22 @@ Page({
     }
   },
   getThePosition() {
+    if(already_loading)
+      return;
+    already_loading=true;
     var that = this
-    data_position = []
     wx.getLocation({
       type: 'gcj02',
       isHighAccuracy: false,
       success(res) {
+        data_position = []
         data_position.push(res.latitude, res.longitude)
         console.log("success", res)
         that.getTheData();
       },
       fail(res) {
         console.log("fail to get the position")
+        that.getTheData();
       }
     })
     console.log("get the data")
@@ -101,6 +109,7 @@ Page({
   setOption: function (Chart) {
     Chart.clear(); // 清除
     Chart.setOption(this.getOption()); //获取新数据
+    already_loading=false;
   },
   getOption: function () {
     var canteen_pos = [
@@ -165,6 +174,8 @@ Page({
       36: 9
     }
     var canteen_series = ['一餐', '二餐', '三餐', '四餐', '五餐', '六餐', '七餐', '哈乐', '玉兰苑'];
+    var canteen_colour_src=["#70F3FF", "#FF461F", "#9ED900", "#B36D61", "#725E82", "#2E4E7E", "#88ADA6", "#4C221B", "#7FECAD"];
+    var canteen_colour=[];
     var data_canteen = [];
 
     for (var j = 0; j < 9; j++) {
@@ -178,13 +189,14 @@ Page({
         tmp.push(
           [
             getDistance(data_position, canteen_pos[canteen_dic[data_get_tmp[i]["Id"]] - 1]),
-            (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"]) / data_get_tmp[i]["Seat_s"],
+            data_get_tmp[i]["Seat_u"] / data_get_tmp[i]["Seat_s"],
             (data_get_tmp[i]["Seat_s"] - data_get_tmp[i]["Seat_u"]),
             data_get_tmp[i]["Name"],
             data_get_tmp[i]["Id"],
           ]
         )
       }
+      canteen_colour.push(canteen_colour_src[canteen_dic[data_get_tmp[0]["Id"]]-1])
       data_canteen.push({
         type: 'scatter',
         name: canteen_series[canteen_dic[data_get_tmp[0]["Id"]] - 1],
@@ -198,7 +210,7 @@ Page({
     console.log(data_canteen)
 
     var option = {
-      color: ["#70F3FF", "#FF461F", "#9ED900", "#B36D61", "#725E82", "#2E4E7E", "#88ADA6", "#4C221B", "#7FECAD"],
+      color: canteen_colour,
       backgroundColor: '#eee',
       xAxis: {
         type: 'value',
@@ -208,7 +220,7 @@ Page({
       },
       yAxis: {
         type: 'value',
-        name: '空座比',
+        name: '人数座位比',
         nameLocation: 'end'
       },
       grid: {
@@ -226,8 +238,8 @@ Page({
       },
       visualMap: {
         show: false,
-        max: 1000,
         dimension: 2,
+        max: 800,
         inRange: {
           symbolSize: [20, 70]
         }
@@ -240,15 +252,15 @@ Page({
     }
     return option;
   },
-  onTabItemTap(){
-    this.getThePosition();
+  onTabItemTap() {
+    if(flag)
+      this.getThePosition();
   },
-  onPullDownRefresh(){
+  onPullDownRefresh() {
     wx.startPullDownRefresh({
       success: (res) => {
-        wx.stopPullDownRefresh({
-          success: (res) => {this.getThePosition()},
-        })
+        this.getThePosition()
+        wx.stopPullDownRefresh({})
       },
     })
   }

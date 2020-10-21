@@ -8,6 +8,10 @@
     </block>
   </view>
   <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+    <view class="canteen">
+      <text class="user-motto">{{motto}}</text>
+    <text class="user-motto">\n\n本次建议您前往的餐厅是\n\n</text>
+      <text wx:for="{{canteens}}" class="user-motto">{{item.name}}\n</text>
+    </view>
   </view>
 </view>

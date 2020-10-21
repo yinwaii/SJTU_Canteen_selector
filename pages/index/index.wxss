@@ -17,5 +17,10 @@
 }
 
 .usermotto {
-  margin-top: 200px;
+  margin-top: 170rpx;
+  width: 220px;
+}
+
+.canteen {
+  text-align:center;
 }
