@@ -2,6 +2,8 @@
   "navigationBarTitleText": "食堂选择器",
     "usingComponents": {
       "mp-cells": "/miniprogram_npm/weui-miniprogram/cells/cells",
-      "mp-cell": "/miniprogram_npm/weui-miniprogram/cell/cell"
+      "mp-cell": "/miniprogram_npm/weui-miniprogram/cell/cell",
+      "mp-form": "/miniprogram_npm/weui-miniprogram/form/form"
+
     }
 }

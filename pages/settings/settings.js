@@ -1,9 +1,13 @@
-var pageData = {}
-for (var i = 1; i < 5; ++i) {
-  (function (index) {
-    pageData[`slider${index}change`] = function (e) {
-      console.log(`slider${index}发生change事件，携带值为`, e.detail.value)
-    }
-  })(i);
-}
-Page(pageData)
+const app = getApp()
+Page({
+  data: {
+    alpha: app.globalData.alpha,
+    num: app.globalData.num
+  },
+  change_alpha(e) {
+    app.globalData.alpha = e.detail.value
+  },
+  change_num(e) {
+    app.globalData.num = e.detail.value
+  }
+})

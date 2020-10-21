@@ -1,31 +1,29 @@
-<view class="page">
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
     <view class="page__hd">
-        <view class="page__title">Form</view>
-        <view class="page__desc">表单输入</view>
+        <view class="page__title">设置</view>
+        <view class="page__desc">请根据自己的偏好进行个性化设置</view>
     </view>
     <view class="page__bd">
-        <view class="weui-cell weui-cell_select">
-            <view class="weui-cell__hd weui-cell__hd_in-select-after">
-                <view class="weui-label">国家/地区</view>
-            </view>
-            <view class="weui-cell__bd">
-                <picker bindchange="bindCountryChange" value="{{countryIndex}}" range="{{countries}}">
-                    <view class="weui-select weui-select_in-select-after">{{countries[countryIndex]}}</view>
-                </picker>
+        <mp-cells title="推荐设置" footer="越小越关心距离，越大越关心人数">
+            <mp-cell title="优选系数">
+                <slider bindchange="change_alpha" value="{{alpha}}" min="0" step="0.05" max="1" show-value />
+            </mp-cell>
+        </mp-cells>
+        <mp-cells title="显示设置">
+            <mp-cell title="推荐食堂数">
+                <slider bindchange="change_num" value="{{num}}" min="1" max="10" show-value />
+            </mp-cell>
+        </mp-cells>
+
+        <view class="weui-cells__title">过滤设置</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_switch">
+                <view class="weui-cell__bd">是否开启过滤</view>
+                <view class="weui-cell__ft">
+                    <switch checked />
+                </view>
             </view>
         </view>
-        <view class="weui-cell weui-cell_select">
-            <view class="weui-cell__hd weui-cell__hd_in-select-after">
-                <view class="weui-label">国家/地区</view>
-            </view>
-            <view class="weui-cell__bd">
-                <slider bindchange="slider4change" min="50" max="200" show-value/>
-            </view>
-        </view>
-        <mp-cells title="提交后表单项报错">
-                <mp-cell show-error prop="idcard" title="卡号" ext-class="">
-                    <slider bindchange="slider4change" min="50" max="200" show-value/>
-                </mp-cell>
-            </mp-cells>
     </view>
 </view>
