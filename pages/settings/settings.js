@@ -12,16 +12,22 @@ Page({
     app.globalData.num = e.detail.value
     this.setSettings()
   },
-  setSettings(){
+  setSettings() {
     const db = wx.cloud.database()
     db.collection('userSettings').doc(app.globalData.openid).update({
-      data:{
-        alpha:app.globalData.alpha,
-        num:app.globalData.num
+      data: {
+        alpha: app.globalData.alpha,
+        num: app.globalData.num
       },
-      success:function(res){
-        console.log("setting the settings",res)
+      success: function (res) {
+        console.log("setting the settings", res)
       }
+    })
+  },
+  onTabItemTap(){
+    this.setData({
+      alpha: app.globalData.alpha,
+      num: app.globalData.num
     })
   }
 })

@@ -5,7 +5,7 @@
         <view class="page__desc">请根据自己的偏好进行个性化设置</view>
     </view>
     <view class="page__bd">
-        <mp-cells title="推荐设置" footer="越小越关心距离，越大越关心人数">
+        <mp-cells title="推荐设置" footer="越小越关心人数，越大越关心距离">
             <mp-cell title="优选系数">
                 <slider bindchange="change_alpha" value="{{alpha}}" min="0" step="0.05" max="1" show-value />
             </mp-cell>
